@@ -1,29 +1,19 @@
 import logging
 import sys
+import os
+from datetime import datetime
 
-def get_logger(name: str, level: int = logging.INFO) -> logging.Logger:
-    """
-    Create and configure a logger instance.
-    
-    Args:
-        name: Name of the logger (typically __name__)
-        level: Logging level (default: INFO)
-    
-    Returns:
-        Configured logger instance
-    """
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    
-    # Create console handler with formatting
-    handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    handler.setFormatter(formatter)
-    
-    # Add handler if not already present
-    if not logger.handlers:
-        logger.addHandler(handler)
-    
-    return logger
+LOG_FILE = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+LOG_DIR = os.path.join(os.getcwd(),"logs",LOG_FILE)
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOG_FILE_PATH = os.path.join(LOG_DIR, LOG_FILE)
+
+logging.basicConfig(
+    filename=LOG_FILE_PATH,
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+if __name__ == "__main__":
+    logging.info("Logger is set up and ready to use.")
